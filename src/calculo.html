@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ahorro Exponencial</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section {
+            padding-right: 20px;
+            border-right: 2px solid #e5e7eb;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 2px solid #e5e7eb;
+                padding-bottom: 30px;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-section {
+            padding-left: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .result-section {
+                padding-left: 0;
+            }
+        }
+        
+        .result-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .result-card h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-card h3 i {
+            color: #4f46e5;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .result-value {
+            color: #111827;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            color: #059669;
+        }
+        
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .plan-table th {
+            background: #4f46e5;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .plan-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .plan-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .plan-table tr:hover {
+            background: #f3f4f6;
+        }
+        
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            display: none;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .info-icon {
+            color: #6b7280;
+            cursor: help;
+            margin-left: 5px;
+        }
+        
+        .info-text {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Calculadora de Ahorro Exponencial</h1>
+            <p>Ahorra de forma inteligente con crecimiento exponencial día a día</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="total">
+                        Total a ahorrar ($)
+                        <i class="fas fa-info-circle info-icon" title="Cantidad total que deseas acumular"></i>
+                    </label>
+                    <input type="number" id="total" value="400" min="1" step="0.01" placeholder="Ej: 400">
+                    <div class="info-text">Cantidad total que quieres acumular</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="primerDia">
+                        Cantidad primer día ($)
+                        <i class="fas fa-info-circle info-icon" title="Cuánto ahorrarás el primer día"></i>
+                    </label>
+                    <input type="number" id="primerDia" value="20" min="0.01" step="0.01" placeholder="Ej: 20">
+                    <div class="info-text">Lo que ahorrarás el primer día</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dias">
+                        Días totales
+                        <i class="fas fa-info-circle info-icon" title="Número de días del plan de ahorro"></i>
+                    </label>
+                    <input type="number" id="dias" value="15" min="1" step="1" placeholder="Ej: 15">
+                    <div class="info-text">Duración total del plan de ahorro</div>
+                </div>
+                
+                <button class="calculate-btn" onclick="calcularAhorro()">
+                    <i class="fas fa-calculator"></i> Calcular Plan de Ahorro
+                </button>
+                
+                <div class="loading" id="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Calculando plan óptimo...
+                </div>
+                
+                <div class="error" id="error"></div>
+            </div>
+            
+            <div class="result-section">
+                <div class="result-card">
+                    <h3><i class="fas fa-chart-bar"></i> Resumen del Plan</h3>
+                    <div class="result-item">
+                        <span class="result-label">Razón de crecimiento:</span>
+                        <span class="result-value" id="razon">1.039772</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total acumulado:</span>
+                        <span class="result-value highlight" id="totalAcumulado">$400.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Último día ahorrarás:</span>
+                        <span class="result-value highlight" id="ultimoDia">$34.53</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Ahorro constante sería:</span>
+                        <span class="result-value" id="ahorroConstante">$300.00</span>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <h3><i class="fas fa-calendar-alt"></i> Plan Diario</h3>
+                    <div class="table-container">
+                        <table class="plan-table" id="tablaPlan">
+                            <thead>
+                                <tr>
+                                    <th>Día</th>
+                                    <th>Cantidad a Ahorrar</th>
+                                    <th>Acumulado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCuerpo">
+                                <!-- Se llena con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Calculadora de Ahorro Exponencial | Cada día ahorras un poco más que el anterior</p>
+        </div>
+    </div>
+
+    <script>
+        // Función principal de cálculo
+        function planAhorroExponencial(total, primerDia, dias, precision = 1e-10, maxIterations = 1000) {
+            // Caso especial: ahorro constante
+            const sumaConstante = primerDia * dias;
+            if (Math.abs(sumaConstante - total) < precision) {
+                const plan = Array(dias).fill(primerDia);
+                let acumulado = 0;
+                const planConAcumulado = plan.map(valor => {
+                    acumulado += valor;
+                    return { dia: valor, acumulado };
+                });
+                return { razon: 1, planDiario: plan, sumaTotal: sumaConstante, planConAcumulado };
+            }
+            
+            // Verificar si es posible
+            if (primerDia * dias > total) {
+                throw new Error(
+                    `No es posible crecimiento exponencial.\n` +
+                    `Con ahorro constante ya ahorrarías $${sumaConstante.toFixed(2)},\n` +
+                    `que es mayor que el total de $${total.toFixed(2)}.\n` +
+                    `Necesitas reducir la cantidad del primer día o aumentar el total.`
+                );
+            }
+            
+            // Función para calcular la suma dada una razón r
+            const sumaConRazon = (r) => {
+                if (Math.abs(r - 1) < precision) {
+                    return primerDia * dias;
+                }
+                return primerDia * (Math.pow(r, dias) - 1) / (r - 1);
+            };
+            
+            // Búsqueda de r por método de bisección
+            let rMin = 1.0;
+            let rMax = 2.0;
+            
+            // Asegurar que rMax sea suficiente para alcanzar el total
+            while (sumaConRazon(rMax) < total) {
+                rMax *= 1.5;
+                if (rMax > 100) {
+                    throw new Error("No se pudo encontrar una razón válida. Verifica los parámetros.");
+                }
+            }
+            
+            let r = 1.0;
+            let iteraciones = 0;
+            
+            while (iteraciones < maxIterations) {
+                r = (rMin + rMax) / 2;
+                const sumaActual = sumaConRazon(r);
+                
+                if (Math.abs(sumaActual - total) < precision) {
+                    break;
+                }
+                
+                if (sumaActual < total) {
+                    rMin = r;
+                } else {
+                    rMax = r;
+                }
+                
+                iteraciones++;
+                
+                if (rMax - rMin < precision) {
+                    break;
+                }
+            }
+            
+            // Calcular el plan diario con acumulado
+            const planConAcumulado = [];
+            let sumaAcumulada = 0;
+            
+            for (let dia = 1; dia <= dias; dia++) {
+                const ahorroDia = primerDia * Math.pow(r, dia - 1);
+                sumaAcumulada += ahorroDia;
+                planConAcumulado.push({
+                    dia: ahorroDia,
+                    acumulado: sumaAcumulada
+                });
+            }
+            
+            return {
+                razon: r,
+                planDiario: planConAcumulado.map(p => p.dia),
+                planConAcumulado: planConAcumulado,
+                sumaTotal: sumaAcumulada
+            };
+        }
+        
+        // Función para mostrar resultados
+        function mostrarResultados(resultado, total, primerDia, dias) {
+            // Actualizar resumen
+            document.getElementById('razon').textContent = resultado.razon.toFixed(6);
+            document.getElementById('totalAcumulado').textContent = `$${resultado.sumaTotal.toFixed(2)}`;
+            document.getElementById('ultimoDia').textContent = `$${resultado.planDiario[dias-1].toFixed(2)}`;
+            document.getElementById('ahorroConstante').textContent = `$${(primerDia * dias).toFixed(2)}`;
+            
+            // Actualizar tabla
+            const tablaCuerpo = document.getElementById('tablaCuerpo');
+            tablaCuerpo.innerHTML = '';
+            
+            resultado.planConAcumulado.forEach((item, index) => {
+                const fila = document.createElement('tr');
+                
+                // Destacar el último día
+                if (index === dias - 1) {
+                    fila.style.backgroundColor = '#d1fae5';
+                    fila.style.fontWeight = 'bold';
+                }
+                
+                // Destacar el primer día
+                if (index === 0) {
+                    fila.style.backgroundColor = '#e0e7ff';
+                }
+                
+                fila.innerHTML = `
+                    <td>Día ${index + 1}</td>
+                    <td>$${item.dia.toFixed(2)}</td>
+                    <td>$${item.acumulado.toFixed(2)}</td>
+                `;
+                tablaCuerpo.appendChild(fila);
+            });
+        }
+        
+        // Función principal llamada al hacer clic
+        function calcularAhorro() {
+            // Mostrar carga
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            
+            // Obtener valores
+            const total = parseFloat(document.getElementById('total').value);
+            const primerDia = parseFloat(document.getElementById('primerDia').value);
+            const dias = parseInt(document.getElementById('dias').value);
+            
+            // Validaciones básicas
+            if (isNaN(total) || total <= 0) {
+                mostrarError("Por favor ingresa un total válido mayor a 0");
+                return;
+            }
+            
+            if (isNaN(primerDia) || primerDia <= 0) {
+                mostrarError("La cantidad del primer día debe ser mayor a 0");
+                return;
+            }
+            
+            if (isNaN(dias) || dias <= 0 || dias > 365) {
+                mostrarError("El número de días debe estar entre 1 y 365");
+                return;
+            }
+            
+            if (primerDia > total) {
+                mostrarError("El primer día no puede ser mayor que el total");
+                return;
+            }
+            
+            // Calcular con un pequeño retardo para mostrar la animación
+            setTimeout(() => {
+                try {
+                    const resultado = planAhorroExponencial(total, primerDia, dias);
+                    mostrarResultados(resultado, total, primerDia, dias);
+                    document.getElementById('loading').style.display = 'none';
+                } catch (error) {
+                    mostrarError(error.message);
+                }
+            }, 300);
+        }
+        
+        // Función para mostrar errores
+        function mostrarError(mensaje) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = mensaje;
+            errorDiv.style.display = 'block';
+            
+            // Ocultar el error después de 5 segundos
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Ejemplo pre-calculado al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            const resultado = planAhorroExponencial(4000, 20, 150);
+            mostrarResultados(resultado, 4000, 20, 150);
+            
+            // Agregar validación en tiempo real
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => {
+                    document.getElementById('error').style.display = 'none';
+                });
+            });
+            
+            // Permitir calcular con Enter
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        calcularAhorro();
+                    }
+                });
+            });
+        });
+        
+        // Ejemplos rápidos
+        function cargarEjemplo(numero) {
+            if (numero === 1) {
+                document.getElementById('total').value = 400;
+                document.getElementById('primerDia').value = 20;
+                document.getElementById('dias').value = 15;
+            } else if (numero === 2) {
+                document.getElementById('total').value = 1000;
+                document.getElementById('primerDia').value = 10;
+                document.getElementById('dias').value = 30;
+            } else if (numero === 3) {
+                document.getElementById('total').value = 5000;
+                document.getElementById('primerDia').value = 50;
+                document.getElementById('dias').value = 60;
+            }
+            calcularAhorro();
+        }
+        
+        // Agregar botones de ejemplo al final del input-section (opcional)
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputSection = document.querySelector('.input-section');
+            const ejemploDiv = document.createElement('div');
+            ejemploDiv.className = 'form-group';
+            ejemploDiv.innerHTML = `
+                <label>Ejemplos rápidos:</label>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button onclick="cargarEjemplo(1)" style="flex:1; padding:10px; background:#e0e7ff; border:none; border-radius:8px; cursor:pointer">
+                        $400 en 15 días
+                    </button>
+                    <button onclick="cargarEjemplo(2)" style="flex:1; padding:10px; background:#d1fae5; border:none; border-radius:8px; cursor:pointer">
+                        $1000 en 30 días
+                    </button>
+                    <button onclick="cargarEjemplo(3)" style="flex:1; padding:10px; background:#fef3c7; border:none; border-radius:8px; cursor:pointer">
+                        $5000 en 60 días
+                    </button>
+                </div>
+            `;
+            inputSection.appendChild(ejemploDiv);
+        });
+    </script>
+</body>
+</html>

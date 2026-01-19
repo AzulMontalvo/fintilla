@@ -1,0 +1,84 @@
+src/
+├── domain/
+|    |Aquí vive la lógica pura del negocio. Nada de React, nada de PDF, nada de estados.
+│    ├── models/
+│    │    ├── SavingsPlan.ts
+|    |    |   Define qué es un plan de ahorro, no cómo se muestra.
+|    |    |    Contiene:
+|    |    |    Nombre del usuario (opcional)
+|    |    |    Meta de ahorro
+|    |    |    Plazo
+|    |    |    Periodicidad
+|    |    |    Método elegido
+|    |    |    Configuración del método
+|    |    |    Es un contrato de datos (interface / type).
+│    │    ├── Period.ts
+|    |    |   Modela conceptos de tiempo:
+|    |    |    semana
+|    |    |    mes
+|    |    |    año
+|    |    |    número de unidades
+│    │    └── TableCell.ts
+|    |         Define una celda de la tabla.
+|    |         Ejemplo de responsabilidades:
+|    |         monto a ahorrar
+|    |         índice (opcional)
+|    |         estado (vacío / válido)
+|    |         No sabe nada del PDF, solo describe datos.
+│    │
+│    ├── methods/
+│    │   ├── fixedAmount.ts Divide la meta total en montos constantes.
+│    │   ├── randomAmount.ts Genera montos aleatorios.
+│    │   ├── progressiveAmount.ts Calcula montos crecientes (lineal o exponencial). Ajusta el último valor si es necesario. 
+│    │   └── index.ts Exporta todos los métodos desde un solo lugar.
+│    │
+│    ├── calculators/
+│    │   ├── totalIterations.ts ¿Cuántas veces se va a ahorrar?
+│    │   └── tableLayout.ts Decide cómo acomodar visualmente los datos:Número de filas y Número de columnas
+│    │
+│    └── validators/
+│       └── savingsPlanValidator.ts
+|            Valida reglas del negocio:
+|                La meta debe ser > 0
+|                El mínimo no puede ser mayor que el máximo
+|                La periodicidad es compatible con el plazo
+|                No muestra errores, solo los detecta.
+│
+├── application/
+│   ├── builders/
+│   │   ├── savingsPlanBuilder.ts Convierte datos crudos del formulario en un SavingsPlan.
+│   │   └── tableDataBuilder.ts Toma el arreglo y lo convierte en TableCell[][]. Decide: rellenos, celdas vacías y orden.
+│   │
+│   └── services/
+│       └── generateSavingsTemplate.ts
+|            Es el flujo completo.
+|             Responsabilidades:
+|             Validar el plan
+|             Calcular iteraciones
+|             Ejecutar el método de ahorro
+|             Construir la tabla
+|             Retornar un objeto listo para presentar
+|             Este archivo no renderiza nada.
+│
+├── presentation/
+│   ├── pdf/
+│   │   ├── PdfTemplate.tsx Estructura general del PDF
+│   │   ├── SavingsTable.tsx Recibe TableCell[][] y la pinta como tabla
+│   │   └── PdfStyles.ts Estilos centralizados del PDF.????
+│   │
+│   └── viewModels/
+│       └── SavingsTemplateVM.ts
+|            Adapta los datos del service al PDF:
+|            formatos de moneda
+|            textos finales
+|            Es el último paso antes del render.
+│
+├── ui/
+│   ├── forms/
+│   │   └── SavingsForm.tsx Inputs, selects, validación visual. No calcula nada.
+│   └── pages/
+│       └── CreateTemplate.tsx Orquesta el formulario, llama al service y dispara la generación del PDF.
+│
+└── utils/
+    ├── dateUtils.ts
+    └── numberUtils.ts Redondeos, múltiplos, clamps

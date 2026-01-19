@@ -1,0 +1,281 @@
+:root {
+    /* ===== Base Neutra ===== */
+    --bg-main: #e7e9ed;
+    --bg-surface: #EEF1F5;
+    --bg-surface-elevated: #F6F8FA;
+
+    /* ===== Texto ===== */
+    --text-primary: #2C2F33;
+    --text-secondary: #697077;
+    --text-disabled: #A0A6AD;
+
+    /* ===== Acento Azul ===== */
+    --accent-dark: #244468;
+    --accent-primary: #4A90E2;
+    --accent-soft: #6FA8F0;
+
+    /* ===== Sombras Neumórficas ===== */
+    --shadow-dark: #C9CDD3;
+    --shadow-light: #FFFFFF;
+
+    /* ===== Estados ===== */
+    --border-soft: #D6DAE0;
+    --font-main: 'Google Sans', system-ui, sans-serif;
+
+    /* ===== Sombras Neumórficas ===== */
+    --flat-shadow: 5px 5px 10px #c4c6c9, -5px -5px 10px #ffffff;
+    --pressed-shadow: inset 5px 5px 10px #c4c6c9, inset -5px -5px 10px #ffffff;
+}
+
+@font-face {
+    font-family: "Google Sans";
+    src: url("../assets/fonts/GoogleSans.ttf") format("trueType");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: var(--font-main);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-main);
+}
+
+#root {
+    min-height: 100vh;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--bg-main);
+}
+
+header {
+    width: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    color: var(--text-primary);
+}
+
+/* Menú Navbar */
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: calc(100% - 24px);
+    max-width: 1200px;
+    height: 85px;
+    max-height: 100px;
+    margin: 18px auto;
+    padding: 14px 15px 14px 15px;
+}
+
+nav button:first-child {
+    justify-self: start;
+}
+
+nav img {
+    justify-self: center;
+}
+
+nav button:last-child {
+    justify-self: end;
+}
+
+.navbar-logo-mobile {
+    height: 60px;
+    width: auto;
+    cursor: pointer;
+    display: block;
+}
+
+.navbar-logo-desktop {
+    display: none;
+}
+
+/* Estilos Botones*/
+.flat-button {
+    color: var(--text-secondary);
+    padding: 0.7em 1.7em;
+    font-weight: 500;
+    border-radius: 1.5em;
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    transition: 0.1s ease-in-out;
+    background: var(--bg-main);
+    box-shadow: var(--flat-shadow)
+}
+
+.flat-button:hover {
+  /* background-color: #dddfe2;
+  border: 1px solid #dddfe2; */
+  box-shadow: 2px 2px 4px #c4c6c9, -2px -2px 4px #ffffff;
+}
+
+.flat-button:active {
+    background-color: var(--bg-main);
+    color: #666;
+    box-shadow: var(--pressed-shadow);
+}
+
+.hero button:active {
+    background-color: var(--bg-main);
+    color: var(--accent-dark);
+    box-shadow: var(--pressed-shadow);
+}
+
+/* Estilos Hero */
+.hero {
+    margin: 0 2rem 0.5rem 2rem;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.hero p {
+    margin: 1rem 0 2rem 0;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.hero button {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+/* Estilos Hero */
+.card {
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    gap: 2rem;
+    padding: 2.5rem;
+    margin: 20px;
+    background-color: var(--bg-main);
+    box-shadow: var(--pressed-shadow);
+    border-radius: 1.5em;
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.card header {
+    max-width: 600px;
+}
+
+.card header h1 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.card header p {
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Cards en columnas */
+.column-card {
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    gap: 2rem;
+    padding: 2.5rem;
+    margin: 20px;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/*Estilos responsivos */
+@media (min-width: 768px) {
+    nav {
+        /* display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center; */
+        width: calc(100% - 32px);
+        max-width: 1440px;
+        /* max-height: 80px; */
+    }
+
+    .navbar-logo-desktop {
+        height: 60px;
+        width: auto;
+        cursor: pointer;
+        display: block;
+    }     
+
+    .navbar-logo-mobile {
+        display: none;
+    }
+
+    .navbar-button {
+        font-size: 18px;
+    }
+
+    .flat-button {
+        font-size: 16px;
+    }
+
+    .card {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .card header {
+        flex: 1;
+        max-width: none;
+    }
+
+    .card header h1 {
+        font-size: 3rem;
+    }
+
+    .column-card {
+        width: 100%;
+        flex-direction: row;
+    }
+
+    .column-card .card {
+        width: 50%;
+        flex-direction: column;
+        margin: 0;
+    }
+}
