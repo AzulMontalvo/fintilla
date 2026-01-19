@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { GenerationOptions, NumberResult } from '../../domain/methods/randomAmount';
 import {
   validateInputs,
