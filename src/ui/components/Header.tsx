@@ -1,16 +1,15 @@
 // import { Link } from "react-router-dom";
-import logoDesktop from "../../assets/logo-desktop.png";
-import logoMobile from "../../assets/logo-mobile.png";
 
 export default function Header() {
     return (
         <nav>
-            <button className="flat-button">Inicio</button>
-            <img src={logoDesktop} alt="Logo" className="navbar-logo-desktop" />
-            <img src={logoMobile} alt="Logo" className="navbar-logo-mobile" />
             <button className="flat-button">
-                Crear plantilla
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#2C2F33" viewBox="0 0 256 256"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"></path></svg>
             </button>
+            <a href="/" className="logo">fintilla</a>
+            {/* <button className="flat-button">
+                Crear
+            </button> */}
         </nav>
     );
 }
