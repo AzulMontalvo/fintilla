@@ -3,6 +3,7 @@
 import './App.css'
 import Home from './ui/pages/Home'
 import Header from './ui/components/Header'
+import Footer from './ui/components/Footer'
 // import RandomNumberGenerator from './ui/pages/random'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Home />
         {/* <RandomNumberGenerator /> */}
       </main>
+      <footer><Footer /></footer>
     </div>
   );
 }
